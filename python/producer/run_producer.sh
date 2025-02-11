@@ -15,10 +15,11 @@ if [ ! -d "$VENV_NAME" ]; then
     
     # Activate virtual environment and install requirements
     source $VENV_NAME/bin/activate
-    pip install -r requirements.txt
+    pip install -r requirements.txt > /dev/null 2>&1
 else
     echo "Virtual environment already exists, activating..."
     source $VENV_NAME/bin/activate
+    pip install -r requirements.txt > /dev/null 2>&1
 fi
 
 # Run the producer script
