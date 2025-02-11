@@ -1,3 +1,7 @@
+# Dockerfile for consumer application
+# This file defines the Docker container configuration needed to run the consumer script
+# in an isolated environment. It sets up Ubuntu with Python, installs dependencies,
+# and configures everything needed to run the Flask webhook consumer service.
 FROM ubuntu:latest
 
 # Install system dependencies

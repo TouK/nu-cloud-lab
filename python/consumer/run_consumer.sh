@@ -78,14 +78,20 @@ cloudflared tunnel --url http://localhost:$PORT 2>&1 | while read line; do
         # Extract the URL from the next line
         read next_line
         url=$(echo "$next_line" | grep -o 'https://[^[:space:]]*')
-        echo -e "\nSuccessfully created Cloudflare tunnel.\n\nWebhook URL(put this address into the Endpoint field of add Subscription form on Nu Cloud):\n${url}/webhook\n"
+        echo -e "\nSuccessfully created Cloudflare tunnel.\n\nWebhook URL(put this address into the Endpoint field of add Subscription form on Nu Cloud):\n\n${url}/webhook\n\n\nPress Ctrl+C to stop the consumer."
     fi
     # echo "$line"
-done &
+done 2>/dev/null &
 CLOUDFLARED_PID=$!
 
-# When script is interrupted, kill both processes
-trap 'kill $GUNICORN_PID $CLOUDFLARED_PID' EXIT
+# When script is interrupted, kill both processes and clean up
+trap 'echo -e "\nShutting down services..." && \
+     kill $GUNICORN_PID 2>/dev/null && \
+     kill $CLOUDFLARED_PID 2>/dev/null && \
+     wait $GUNICORN_PID 2>/dev/null && \
+     wait $CLOUDFLARED_PID 2>/dev/null && \
+     echo -e "Services stopped.\n"' EXIT
 
 # Wait for either process to exit
-wait 
+wait 2>/dev/null
+echo -e "\nServices stopped." 
