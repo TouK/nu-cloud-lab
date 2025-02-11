@@ -13,6 +13,7 @@ WORKDIR /app
 COPY requirements.txt .
 COPY run_producer.sh .
 COPY producer.py .
+COPY config.yaml* .  # This will copy both config.yaml and config.yaml.template
 
 # Make script executable
 RUN chmod +x run_producer.sh

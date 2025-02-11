@@ -7,11 +7,8 @@ from typing import Dict, Any
 import argparse
 from requests.exceptions import RequestException
 import sys
-
-# API details
-URL = "https://mpk-8-gateway.staging-cloud.nussknacker.io/topics/http.example-input"
-USERNAME = "publisher"
-PASSWORD = "QTbp6MQL1bvn9unVrg0XzsXEfff"
+import yaml
+import os
 
 SAMPLE_DATA = {
     "names": ["Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Hannah"],
@@ -70,36 +67,6 @@ def generate_data(template=MESSAGE_TEMPLATE):
         return get_random_value(template)
     return template
 
-def send_data():
-    data = generate_data()
-    headers = {"Content-Type": "application/json"}
-    
-    try:
-        response = requests.post(
-            URL, 
-            auth=(USERNAME, PASSWORD), 
-            headers=headers, 
-            data=json.dumps(data)
-        )
-
-        if response.status_code == 400 and "Invalid message" in response.text:
-            raise ValidationError(
-                f"\n\nSchema validation error detected!\n"
-                f"Your message structure might not match the expected Avro schema.\n\n"
-                f"Current message structure:\n{json.dumps(data, indent=2)}\n\n"
-                f"Suggested Avro schema for your current message structure:\n"
-                f"{generate_avro_schema()}\n\n"
-                f"Please use the topic with the appropriate schema in Nu Cloud matching your message structure.\n"
-                f"You can copy the schema above and use it in the Nu Cloud interface to create new topic.\n"
-            )
-        response.raise_for_status()
-        print(f"✅ Sent message: {data}")
-    except ValidationError as e:
-        print(str(e))
-        sys.exit(1)
-    except RequestException as e:
-        print(f"❌ Failed to send: {data}, Response: {e}")
-
 def infer_avro_type(value: str) -> Dict[str, Any]:
     """Infer Avro type from template value"""
     if value == "random_name" or value == "random_city" or value == "random_product" or value == "random_status":
@@ -143,6 +110,55 @@ def generate_avro_schema(template: Dict = MESSAGE_TEMPLATE, name: str = "Message
     
     return json.dumps(schema, indent=2)
 
+def load_config():
+    """Load configuration from config.yaml file, create from template if missing"""
+    config_path = os.path.join(os.path.dirname(__file__), 'config.yaml')
+    template_path = os.path.join(os.path.dirname(__file__), 'config.yaml.template')
+    
+    if not os.path.exists(config_path):
+        print(f"📝 Creating initial config.yaml from template...")
+        import shutil
+        shutil.copyfile(template_path, config_path)
+        print(f"✅ Created config.yaml")
+        print(f"⚠️  Please edit config.yaml with your actual configuration values")
+        sys.exit(1)
+        
+    with open(config_path, 'r') as f:
+        return yaml.safe_load(f)
+
+def send_data(url: str, username: str, password: str, data: dict = None):
+    """Send data to the API endpoint"""
+    if data is None:
+        data = generate_data()
+    headers = {"Content-Type": "application/json"}
+    
+    try:
+        response = requests.post(
+            url, 
+            auth=(username, password), 
+            headers=headers, 
+            data=json.dumps(data)
+        )
+
+        if response.status_code == 400 and "Invalid message" in response.text:
+            raise ValidationError(
+                f"\n\nSchema validation error detected!\n"
+                f"Your message structure might not match the expected Avro schema.\n\n"
+                f"Current message structure:\n{json.dumps(data, indent=2)}\n\n"
+                f"Suggested Avro schema for your current message structure:\n"
+                f"{generate_avro_schema()}\n\n"
+                f"Please use the topic with the appropriate schema in Nu Cloud matching your message structure.\n"
+                f"You can copy the schema above and use it in the Nu Cloud interface to create new topic.\n"
+            )
+        response.raise_for_status()
+        print(f"✅ Sent message: {data}")
+    except ValidationError as e:
+        print(str(e))
+        sys.exit(1)
+    except RequestException as e:
+        print(f"❌ Failed to send: {data}, Response: {e}")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Message producer with schema generation capability')
     parser.add_argument('--schema', action='store_true', 
@@ -153,10 +169,19 @@ if __name__ == "__main__":
         print("Generated Avro Schema:")
         print(generate_avro_schema())
     else:
+        # Load configuration
+        config = load_config()
+        
+        # Extract API details
+        url = config['api']['url']
+        username = config['api']['username']
+        password = config['api']['password']
+        delay_seconds = config['producer']['delay_seconds']
+
         try:
             while True:
-                send_data()
-                time.sleep(1)
+                send_data(url, username, password)
+                time.sleep(delay_seconds)
         except KeyboardInterrupt:
             print("\nStopping message production.")
             sys.exit(0)
