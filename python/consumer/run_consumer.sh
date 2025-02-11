@@ -3,6 +3,12 @@
 VENV_NAME="consumer_env"
 PORT=6555
 
+DEBUG=false
+for arg in "$@"; do
+    if [ "$arg" = "--debug" ]; then
+        DEBUG=true
+    fi
+done
 
 # Check if requirements.txt exists
 if [ ! -f "requirements.txt" ]; then
@@ -17,10 +23,11 @@ if [ ! -d "$VENV_NAME" ]; then
     
     # Activate virtual environment and install requirements
     source $VENV_NAME/bin/activate
-    pip install -r requirements.txt
+    pip install -r requirements.txt > /dev/null 2>&1
 else
     echo "Activating existing virtual environment..."
     source $VENV_NAME/bin/activate
+    pip install -r requirements.txt > /dev/null 2>&1
 fi
 
 # Check if cloudflared is installed
@@ -80,7 +87,10 @@ cloudflared tunnel --url http://localhost:$PORT 2>&1 | while read line; do
         url=$(echo "$next_line" | grep -o 'https://[^[:space:]]*')
         echo -e "Successfully established Cloudflare tunnel.\n\nConsumer is now ready to receive messages from Nu Cloud!\n\nWebhook URL:\n(Please copy and paste this address into the 'Endpoint' field of the 'Add Subscription' form in Nu Cloud):\n\n${url}/webhook\n\nPress Ctrl+C to stop the consumer."
     fi
-    # echo "$line"
+    # Show all output if debug mode is enabled
+    if [ "$DEBUG" = true ]; then
+        echo "$line"
+    fi
 done 2>/dev/null &
 CLOUDFLARED_PID=$!
 
