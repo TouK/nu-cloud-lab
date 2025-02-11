@@ -19,7 +19,7 @@ if [ ! -d "$VENV_NAME" ]; then
     source $VENV_NAME/bin/activate
     pip install -r requirements.txt
 else
-    echo "Virtual environment already exists, activating..."
+    echo "Activating existing virtual environment..."
     source $VENV_NAME/bin/activate
 fi
 
@@ -67,8 +67,8 @@ if ! command -v cloudflared &> /dev/null; then
 fi
 
 # Start gunicorn in the background
-echo "Starting gunicorn server..."
-gunicorn --bind 0.0.0.0:$PORT consumer:app &
+echo "Starting Gunicorn server..."
+gunicorn --bind 0.0.0.0:$PORT consumer:app 2>/dev/null &
 GUNICORN_PID=$!
 
 # Start cloudflared and capture its output
@@ -78,7 +78,7 @@ cloudflared tunnel --url http://localhost:$PORT 2>&1 | while read line; do
         # Extract the URL from the next line
         read next_line
         url=$(echo "$next_line" | grep -o 'https://[^[:space:]]*')
-        echo -e "\nSuccessfully created Cloudflare tunnel.\n\nWebhook URL(put this address into the Endpoint field of add Subscription form on Nu Cloud):\n\n${url}/webhook\n\n\nPress Ctrl+C to stop the consumer."
+        echo -e "Successfully established Cloudflare tunnel.\n\nConsumer is now ready to receive messages from Nu Cloud!\n\nWebhook URL:\n(Please copy and paste this address into the 'Endpoint' field of the 'Add Subscription' form in Nu Cloud):\n\n${url}/webhook\n\nPress Ctrl+C to stop the consumer."
     fi
     # echo "$line"
 done 2>/dev/null &
