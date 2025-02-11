@@ -1,0 +1,9 @@
+# API Configuration
+api:
+  url: "https://your-api-url.nussknacker.io/topics/your-topic"
+  username: "publisher"
+  password: "your_password"
+
+# Producer Configuration
+producer:
+  delay_seconds: 1
