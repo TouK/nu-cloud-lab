@@ -22,4 +22,4 @@ else
 fi
 
 # Run the producer script
-python producer.py 
+python producer.py "$@" 
