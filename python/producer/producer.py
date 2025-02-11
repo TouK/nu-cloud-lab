@@ -9,7 +9,7 @@ from requests.exceptions import RequestException
 import sys
 
 # API details
-URL = "https://mpk-8-gateway.staging-cloud.nussknacker.io/topics/http.tests"
+URL = "https://mpk-8-gateway.staging-cloud.nussknacker.io/topics/http.example-input"
 USERNAME = "publisher"
 PASSWORD = "QTbp6MQL1bvn9unVrg0XzsXEfff"
 
@@ -22,12 +22,11 @@ SAMPLE_DATA = {
 
 # Template for the message structure
 # Modify this dictionary to change the structure of your messages
-# MESSAGE_TEMPLATE = {
-#     "name": "random_name",
-#     "city": "random_city",
-# }
-
 MESSAGE_TEMPLATE = {
+    "name": "random_name",
+}
+
+EXAMPLE_MESSAGE_TEMPLATE = {
     "user": {
         "name": "random_name",  # Will be replaced with random name
         "city": "random_city"   # Will be replaced with random city
@@ -90,8 +89,8 @@ def send_data():
                 f"Current message structure:\n{json.dumps(data, indent=2)}\n\n"
                 f"Suggested Avro schema for your current message structure:\n"
                 f"{generate_avro_schema()}\n\n"
-                f"Please update the schema in Nu Cloud to match your message structure.\n"
-                f"You can copy the schema above and use it in the Nu Cloud interface.\n"
+                f"Please use the topic with the appropriate schema in Nu Cloud matching your message structure.\n"
+                f"You can copy the schema above and use it in the Nu Cloud interface to create new topic.\n"
             )
         response.raise_for_status()
         print(f"✅ Sent message: {data}")
