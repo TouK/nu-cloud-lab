@@ -1,0 +1,17 @@
+{
+  "name": "consumer",
+  "version": "1.0.0",
+  "main": "dist/consumer.js",
+  "type": "module",
+  "scripts": {
+    "start": "node consumer.js",
+    "run_consumer": "node consumer.js",
+    "run_consumer_in_docker": "docker build -t consumer . && docker run -p 6555:6555 consumer"
+  },
+  "dependencies": {
+    "fastify": "^4.26.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19"
+  }
+} 
