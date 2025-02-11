@@ -5,13 +5,14 @@ import random
 from datetime import datetime
 from typing import Dict, Any
 import argparse
+from requests.exceptions import RequestException
+import sys
 
 # API details
-URL = "https://mpk-8-gateway.staging-cloud.nussknacker.io/topics/http.example-input"
+URL = "https://mpk-8-gateway.staging-cloud.nussknacker.io/topics/http.tests"
 USERNAME = "publisher"
 PASSWORD = "QTbp6MQL1bvn9unVrg0XzsXEfff"
 
-# Data configuration - easy to modify
 SAMPLE_DATA = {
     "names": ["Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Hannah"],
     "cities": ["New York", "London", "Tokyo", "Paris", "Berlin", "Sydney"],
@@ -21,11 +22,12 @@ SAMPLE_DATA = {
 
 # Template for the message structure
 # Modify this dictionary to change the structure of your messages
-MESSAGE_TEMPLATE = {
-    "name": "random_name"
-}
+# MESSAGE_TEMPLATE = {
+#     "name": "random_name",
+#     "city": "random_city",
+# }
 
-EXAMPLE_MESSAGE_TEMPLATE = {
+MESSAGE_TEMPLATE = {
     "user": {
         "name": "random_name",  # Will be replaced with random name
         "city": "random_city"   # Will be replaced with random city
@@ -37,6 +39,9 @@ EXAMPLE_MESSAGE_TEMPLATE = {
         "timestamp": "current_timestamp"
     }
 }
+
+class ValidationError(Exception):
+    pass
 
 def get_random_value(field_type):
     """Generate random values based on the field type"""
@@ -78,13 +83,23 @@ def send_data():
             data=json.dumps(data)
         )
 
-        if response.ok:
-            print(f"Successfully sent: {data}")
-        else:
-            print(f"Failed to send: {data}, Response: {response.status_code}, {response.text}")
-
-    except Exception as e:
-        print(f"Error: {e}")
+        if response.status_code == 400 and "Invalid message" in response.text:
+            raise ValidationError(
+                f"\n\nSchema validation error detected!\n"
+                f"Your message structure might not match the expected Avro schema.\n\n"
+                f"Current message structure:\n{json.dumps(data, indent=2)}\n\n"
+                f"Suggested Avro schema for your current message structure:\n"
+                f"{generate_avro_schema()}\n\n"
+                f"Please update the schema in Nu Cloud to match your message structure.\n"
+                f"You can copy the schema above and use it in the Nu Cloud interface.\n"
+            )
+        response.raise_for_status()
+        print(f"✅ Sent message: {data}")
+    except ValidationError as e:
+        print(str(e))
+        sys.exit(1)
+    except RequestException as e:
+        print(f"❌ Failed to send: {data}, Response: {e}")
 
 def infer_avro_type(value: str) -> Dict[str, Any]:
     """Infer Avro type from template value"""
@@ -139,7 +154,10 @@ if __name__ == "__main__":
         print("Generated Avro Schema:")
         print(generate_avro_schema())
     else:
-        # Original message production logic
-        while True:
-            send_data()
-            time.sleep(1)
+        try:
+            while True:
+                send_data()
+                time.sleep(1)
+        except KeyboardInterrupt:
+            print("\nStopping message production.")
+            sys.exit(0)
