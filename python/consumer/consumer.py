@@ -5,14 +5,11 @@ app = Flask(__name__)
 @app.route('/webhook', methods=['POST'])
 def receive_message():
     try:
-        data = request.json  # Parse JSON payload
-
-        if not data or "message" not in data:
-            return jsonify({"error": "Invalid format. Expected {'message': 'your text'}"}), 400
+        data = request.json  
         
-        print(f"✅ Received message: {data['message']}")
+        print(f"✅ Received message: {data}")
 
-        return jsonify({"status": "success", "received": data["message"]}), 200
+        return jsonify({"status": "success", "received": data}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
