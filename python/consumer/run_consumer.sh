@@ -27,17 +27,29 @@ fi
 if ! command -v cloudflared &> /dev/null; then
     # Check if we have a supported package manager
     if command -v apt &> /dev/null || command -v yum &> /dev/null || command -v brew &> /dev/null; then
-        read -p "cloudflared is not installed. Would you like to install it? (y/n): " install_cloudflared
+        read -p "cloudflared is not installed. It is required to create a secure tunnel to your application. Would you like to install it? (y/n): " install_cloudflared
         if [[ "$install_cloudflared" == "y" || "$install_cloudflared" == "Y" ]]; then
             echo "Installing cloudflared..."
             # For Linux/WSL using apt
             if command -v apt &> /dev/null; then
-                curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+                # Check system architecture
+                ARCH=$(dpkg --print-architecture)
+                if [ "$ARCH" = "arm64" ]; then
+                    curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64.deb
+                else
+                    curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+                fi
                 sudo dpkg -i cloudflared.deb
                 rm cloudflared.deb
             # For CentOS/RHEL using yum
             elif command -v yum &> /dev/null; then
-                curl -L --output cloudflared.rpm https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-x86_64.rpm
+                # Check system architecture
+                ARCH=$(uname -m)
+                if [ "$ARCH" = "aarch64" ]; then
+                    curl -L --output cloudflared.rpm https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64.rpm
+                else
+                    curl -L --output cloudflared.rpm https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-x86_64.rpm
+                fi
                 sudo yum localinstall -y cloudflared.rpm
                 rm cloudflared.rpm
             # For macOS using Homebrew
