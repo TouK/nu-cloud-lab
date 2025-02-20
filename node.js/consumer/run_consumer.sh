@@ -3,6 +3,12 @@
 PORT=6555
 DEBUG=false
 
+# What if the user doesn't have node.js installed?
+if ! command -v node &> /dev/null; then
+    echo "Node.js is not installed. Please install Node.js before running this script."
+    exit 1
+fi
+
 for arg in "$@"; do
     if [ "$arg" = "--debug" ]; then
         DEBUG=true
@@ -18,7 +24,14 @@ fi
 # Check if pnpm is installed
 if ! command -v pnpm &> /dev/null; then
     echo "pnpm is not installed. Installing pnpm..."
-    npm install -g pnpm
+    # Try using corepack first
+    if command -v corepack &> /dev/null; then
+        echo "Using corepack to enable pnpm..."
+        corepack enable pnpm
+    else
+        echo "Corepack not found, installing pnpm globally via npm..."
+        npm install -g pnpm
+    fi
 fi
 
 # Install dependencies
