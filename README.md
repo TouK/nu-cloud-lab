@@ -76,7 +76,7 @@ The producer requires configuration in `config.yaml`. See the template here:
 ```yaml
 # API Configuration
 api:
-  url: "https://your-api-url.nussknacker.io/topics/your-topic"
+  url: "https://your-api-url.cloud.nussknacker.io/topics/your-topic"
   username: "publisher"
   password: "your_password"
 
