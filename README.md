@@ -1,6 +1,6 @@
 # Nu Cloud Lab
 
-A development toolkit for experimenting with Nu Cloud, providing ready-to-use producers and consumers in multiple programming languages.
+A development toolkit for experimenting with [Nu Cloud](https://cloud.nussknacker.io/), providing ready-to-use producers and consumers in multiple programming languages.
 
 ## 🌟 Features
 
@@ -37,7 +37,8 @@ When running directly (without Docker):
 ./run_consumer_sh_in_docker.sh
 ```
 
-3. Copy the generated webhook URL for Nu Cloud configuration
+3. Copy the generated webhook URL into Nu Cloud Add Subscription window
+![Add Subscription Screen](./imgs/addsubscription_screen.png)
 
 ### Setting Up the Producer
 
