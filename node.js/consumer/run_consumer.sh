@@ -3,9 +3,8 @@
 PORT=6555
 DEBUG=false
 
-# What if the user doesn't have node.js installed?
 if ! command -v node &> /dev/null; then
-    echo "Node.js is not installed. Please install Node.js before running this script."
+    echo "Node.js is not installed. Please install Node.js and run the script again."
     exit 1
 fi
 
@@ -34,9 +33,13 @@ if ! command -v pnpm &> /dev/null; then
     fi
 fi
 
-# Install dependencies
-echo "Installing dependencies..."
-pnpm install > /dev/null 2>&1
+# Install dependencies if node_modules doesn't exist or if package.json has changed
+if [ ! -d "node_modules" ] || [ package.json -nt node_modules ]; then
+    echo "Installing dependencies..."
+    pnpm install
+else
+    echo "Dependencies are up to date..."
+fi
 
 # Check if cloudflared is installed
 if ! command -v cloudflared &> /dev/null; then
