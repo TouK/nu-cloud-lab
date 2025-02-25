@@ -20,6 +20,10 @@ A development toolkit for experimenting with Nu Cloud, providing ready-to-use pr
 - Node.js (for Node.js implementation) OR
 - Docker (for containerized execution)
 
+When running directly (without Docker):
+- The consumer requires `cloudflared` to create secure tunnels
+  (The scripts will attempt to install it automatically if missing)
+
 ### Setting Up the Consumer
 
 1. Choose your preferred implementation directory (`python/consumer` or `node.js/consumer`)
