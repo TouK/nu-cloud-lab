@@ -24,6 +24,13 @@ When running directly (without Docker):
 - The consumer requires `cloudflared` to create secure tunnels
   (The scripts will attempt to install it automatically if missing)
 
+### Data Flow
+
+The typical flow of data in this setup is:
+1. **Producer** → Sends messages to Nu Cloud
+2. **Nu Cloud** → Processes messages (filtering, transformations, etc.)
+3. **Consumer** → Receives messages processed by Nu Cloud via webhook
+
 ### Setting Up the Consumer
 
 1. Choose your preferred implementation directory (`python/consumer` or `node.js/consumer`)
