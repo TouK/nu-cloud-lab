@@ -16,8 +16,8 @@ A development toolkit for experimenting with [Nu Cloud](https://cloud.nussknacke
 
 ### Prerequisites
 
-- Python 3.x (for Python implementation) OR
-- Node.js (for Node.js implementation) OR
+- Python 3.x (for Python implementation) **OR**
+- Node.js (for Node.js implementation) **OR**
 - Docker (for containerized execution)
 
 When running directly (without Docker):
