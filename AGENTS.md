@@ -47,6 +47,7 @@ nu-cloud consume --tunnel cloudflared  # Force cloudflared
 nu-cloud consume --tunnel tailscale    # Force tailscale
 nu-cloud consume --no-tunnel           # No tunnel
 nu-cloud consume --tunnel-path /webhook # Custom path (tailscale)
+nu-cloud consume --json                # Raw JSON output (for piping)
 
 # Generate Avro schema
 nu-cloud schema
@@ -62,6 +63,7 @@ nu-cloud schema -o schema.avsc
 - **Interactive config**: `nu-cloud init` wizard
 - **Multiple profiles**: dev/staging/prod in single config file
 - **Dry-run mode**: Test without sending
+- **JSON output mode**: `--json` flag for piping to other tools (jq, files, etc.)
 
 **See `cli/README.md` for complete documentation.**
 

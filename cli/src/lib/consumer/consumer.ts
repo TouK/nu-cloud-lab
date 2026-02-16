@@ -12,12 +12,13 @@ export class Consumer {
     private debug: boolean,
     private useTunnel: boolean = true,
     private tunnelProvider?: TunnelProvider,
-    private tunnelPath?: string
+    private tunnelPath?: string,
+    private jsonMode: boolean = false
   ) {}
 
   async start(): Promise<void> {
     // Start Fastify server
-    this.server = await createServer(this.port, this.debug);
+    this.server = await createServer(this.port, this.debug, this.jsonMode);
     logger.success(`Server listening on http://localhost:${this.port}`);
 
     // Start tunnel if requested

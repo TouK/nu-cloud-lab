@@ -133,6 +133,11 @@ nu-cloud consume --port 8080
 
 # Debug mode
 nu-cloud consume --debug
+
+# JSON output mode (for piping)
+nu-cloud consume --json
+nu-cloud consume --json | jq '.email'
+nu-cloud consume --json --no-tunnel > messages.jsonl
 ```
 
 **Options:**
@@ -141,12 +146,31 @@ nu-cloud consume --debug
 - `--tunnel-path <path>` - Webhook path for tunnel (tailscale only, default: `/webhook`)
 - `--no-tunnel` - Skip tunnel setup
 - `--debug` - Enable debug logging
+- `--json` - Output raw JSON only (suitable for piping to other tools)
 
 **Tunnel Providers:**
 - **cloudflared**: Automatic, requires `cloudflared` installed
 - **tailscale**: Requires `tailscale` installed and authenticated
 - **auto**: Detects which tool is available (cloudflared first, then tailscale)
 - **none**: Local server only (no public URL)
+
+**JSON Mode:**
+The `--json` flag outputs only raw JSON messages (one per line) to stdout, suppressing all other logs. This is perfect for piping to other tools:
+
+```bash
+# Filter emails with jq
+nu-cloud consume --json | jq '.email'
+
+# Save to JSONL file
+nu-cloud consume --json --no-tunnel > messages.jsonl
+
+# Process with custom script
+nu-cloud consume --json | while read -r msg; do
+  echo "$msg" | jq '.userId' >> user_ids.txt
+done
+```
+
+Errors are still sent to stderr in JSON format: `{"error": "message"}`
 
 **Install tunnel tools:**
 ```bash

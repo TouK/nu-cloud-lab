@@ -10,7 +10,12 @@ export const consumeCommand = new Command('consume')
   .option('--tunnel-path <path>', 'Webhook path for tunnel (tailscale)', '/webhook')
   .option('--no-tunnel', 'Skip tunnel setup')
   .option('--debug', 'Enable debug logging')
+  .option('--json', 'Output raw JSON messages only (suitable for piping)')
   .action(async (options) => {
+    // Enable JSON mode if requested
+    if (options.json) {
+      logger.setJsonMode(true);
+    }
     try {
       const port = parseInt(options.port, 10);
 
@@ -31,7 +36,8 @@ export const consumeCommand = new Command('consume')
         options.debug,
         useTunnel,
         tunnelProvider,
-        options.tunnelPath
+        options.tunnelPath,
+        options.json
       );
 
       // Graceful shutdown
