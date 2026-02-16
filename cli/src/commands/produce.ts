@@ -7,7 +7,7 @@ import { logger } from '../utils/logger.js';
 
 export const produceCommand = new Command('produce')
   .description('Send messages to Nu Cloud continuously')
-  .option('-C, --config <path>', 'Config file path', 'config.yaml')
+  .option('-C, --config <path>', 'Config file path', '.nu-cloud.yaml')
   .option('-p, --profile <name>', 'Config profile to use')
   .option('-d, --delay <seconds>', 'Delay between messages (overrides config)', parseFloat)
   .option('-t, --template <path>', 'Template file to use (overrides config)')
@@ -16,7 +16,7 @@ export const produceCommand = new Command('produce')
   .action(async (options) => {
     try {
       const config = await loadConfig(options.config, options.profile);
-      
+
       // Load template (priority: --template > config > default)
       let template;
       if (options.template) {
@@ -29,7 +29,7 @@ export const produceCommand = new Command('produce')
         logger.info('Using default template');
         template = await loadTemplate();
       }
-      
+
       const producer = new Producer(config, options.dryRun, template);
 
       if (options.count) {

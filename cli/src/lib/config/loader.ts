@@ -9,7 +9,7 @@ export async function loadConfig(
   configPath?: string,
   profileName?: string
 ): Promise<NuCloudConfig> {
-  const resolvedPath = configPath || path.join(process.cwd(), 'config.yaml');
+  const resolvedPath = configPath || path.join(process.cwd(), '.nu-cloud.yaml');
 
   try {
     const content = await fs.readFile(resolvedPath, 'utf-8');
@@ -37,7 +37,7 @@ function deepMerge<T extends object>(target: T, source: Partial<T>): T {
   for (const key in source) {
     const sourceValue = source[key];
     const targetValue = result[key];
-    
+
     if (
       sourceValue &&
       typeof sourceValue === 'object' &&

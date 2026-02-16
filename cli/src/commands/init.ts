@@ -15,7 +15,7 @@ export const initCommand = new Command('init')
   .description('Initialize configuration file')
   .option('-i, --interactive', 'Interactive mode (default)', true)
   .option('--no-interactive', 'Non-interactive mode (use template)')
-  .option('-o, --output <path>', 'Output file path', 'config.yaml')
+  .option('-o, --output <path>', 'Output file path', '.nu-cloud.yaml')
   .action(async (options) => {
     try {
       let config: NuCloudConfig;
@@ -80,9 +80,9 @@ export const initCommand = new Command('init')
       // Write config
       const outputPath = path.resolve(options.output);
       await fs.writeFile(outputPath, yaml.stringify(config), 'utf-8');
-      
+
       logger.success(`Configuration file created: ${outputPath}`);
-      
+
       if (!options.interactive) {
         logger.warn('Please edit the config file with your actual credentials');
       }
