@@ -7,11 +7,10 @@ export async function createServer(port: number, debug: boolean): Promise<Fastif
     logger: debug ? true : false
   });
 
-  fastify.post('/webhook', async (request, reply) => {
+  fastify.post('/', async (request, reply) => {
     try {
       const data = request.body;
-      logger.success('Received message:');
-      console.log(JSON.stringify(data, null, 2));
+      logger.success('Received message:', data);
 
       return {
         status: 'success',

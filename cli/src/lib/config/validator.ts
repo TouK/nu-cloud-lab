@@ -14,9 +14,6 @@ export function validateConfig(config: NuCloudConfig): void {
     throw new ConfigError('Missing "api.username" in config');
   }
 
-  if (!config.api.password || config.api.password === 'your_password') {
-    throw new ConfigError(
-      'Invalid or placeholder password in config. Please set a real password.'
-    );
-  }
+  // Password is optional - empty password means no authentication
+  // If endpoint requires auth, it will return 401 and user will know
 }

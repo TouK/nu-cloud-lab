@@ -28,16 +28,25 @@ npm link
 # Initialize configuration
 nu-cloud init
 
-# Produce messages
+# Send single message (manual)
+nu-cloud send --data '{"name": "John", "age": 30}'
+nu-cloud send --file message.json
+nu-cloud send --template custom.yaml
+
+# Produce messages (continuous)
 nu-cloud produce                       # Continuous production
-nu-cloud produce --once                # Single message
+nu-cloud produce -c 10                 # Send 10 messages
+nu-cloud produce -c 1                  # Send single message
 nu-cloud produce --dry-run             # Preview without sending
+nu-cloud produce --template custom.yaml  # Custom template
 nu-cloud produce --profile production  # Use named profile
 
 # Consume messages
-nu-cloud consume                       # With cloudflared tunnel (if installed)
-nu-cloud consume --no-tunnel           # Without tunnel
-nu-cloud consume --port 8080 --debug   # Custom port + debug
+nu-cloud consume                       # Auto-detect tunnel (cloudflared/tailscale)
+nu-cloud consume --tunnel cloudflared  # Force cloudflared
+nu-cloud consume --tunnel tailscale    # Force tailscale
+nu-cloud consume --no-tunnel           # No tunnel
+nu-cloud consume --tunnel-path /webhook # Custom path (tailscale)
 
 # Generate Avro schema
 nu-cloud schema
@@ -45,11 +54,14 @@ nu-cloud schema -o schema.avsc
 ```
 
 **CLI Features:**
-- Interactive configuration setup (`nu-cloud init`)
-- Multiple environment profiles (dev/staging/prod)
-- Dry-run mode for testing
-- Optional Cloudflare tunnel integration
-- TypeScript-based with full type safety
+- **Manual sending**: `send` command for one-off messages
+- **Template system**: Faker.js integration for realistic test data
+- **Custom templates**: YAML/JSON templates with `template_path` in config
+- **Optional auth**: Empty password = no authentication
+- **Multiple tunnels**: Auto-detect cloudflared or tailscale
+- **Interactive config**: `nu-cloud init` wizard
+- **Multiple profiles**: dev/staging/prod in single config file
+- **Dry-run mode**: Test without sending
 
 **See `cli/README.md` for complete documentation.**
 

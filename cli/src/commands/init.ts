@@ -38,8 +38,8 @@ export const initCommand = new Command('init')
           {
             type: 'password',
             name: 'password',
-            message: 'Password:',
-            validate: (input) => input.length > 0 || 'Password is required'
+            message: 'Password (leave empty for no auth):',
+            default: ''
           },
           {
             type: 'number',

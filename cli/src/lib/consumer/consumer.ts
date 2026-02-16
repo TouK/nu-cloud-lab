@@ -1,17 +1,18 @@
 import type { FastifyInstance } from 'fastify';
-import type { ChildProcess } from 'child_process';
 import { createServer } from './server.js';
-import { startCloudflaredTunnel } from './tunnel.js';
+import { startTunnel, type TunnelProvider, type TunnelResult } from './tunnel.js';
 import { logger } from '../../utils/logger.js';
 
 export class Consumer {
   private server?: FastifyInstance;
-  private tunnelProcess?: ChildProcess;
+  private tunnel?: TunnelResult | null;
 
   constructor(
     private port: number,
     private debug: boolean,
-    private useTunnel: boolean = true
+    private useTunnel: boolean = true,
+    private tunnelProvider?: TunnelProvider,
+    private tunnelPath?: string
   ) {}
 
   async start(): Promise<void> {
@@ -21,25 +22,27 @@ export class Consumer {
 
     // Start tunnel if requested
     if (this.useTunnel) {
-      const spinner = logger.spinner('Starting Cloudflare tunnel...').start();
-      
+      // const spinner = logger.spinner('Starting tunnel...').start();
+
       try {
-        const tunnel = await startCloudflaredTunnel(this.port);
-        
-        if (tunnel) {
-          this.tunnelProcess = tunnel.process;
-          spinner.succeed('Cloudflare tunnel established');
-          
-          logger.info('\n🎉 Consumer is ready to receive messages!\n');
-          logger.info('Webhook URL:');
-          logger.info(`${tunnel.url}/webhook\n`);
+        this.tunnel = await startTunnel(this.port, {
+          provider: this.tunnelProvider,
+          path: this.tunnelPath,
+        });
+
+        if (this.tunnel) {
+          // spinner.succeed('Tunnel established');
+
+          logger.info('\nConsumer is ready to receive messages!\n');
+          logger.info('Webhook URL (public):');
+          logger.info(`   ${this.tunnel.url}\n`);
           logger.info('Copy this URL to Nu Cloud "Add Subscription" form\n');
         } else {
-          spinner.warn('Cloudflared not available');
-          logger.info(`Local URL: http://localhost:${this.port}/webhook\n`);
+          // spinner.warn('Tunnel not available');
+          logger.info(`\nLocal URL: http://localhost:${this.port}/webhook\n`);
         }
       } catch (error) {
-        spinner.fail('Failed to start tunnel');
+        // spinner.fail('Failed to start tunnel');
         logger.warn(`Continuing without tunnel. Local URL: http://localhost:${this.port}/webhook\n`);
       }
     } else {
@@ -50,11 +53,13 @@ export class Consumer {
   }
 
   async stop(): Promise<void> {
-    if (this.tunnelProcess) {
-      this.tunnelProcess.kill();
+    if (this.tunnel?.cleanup) {
+      await this.tunnel.cleanup();
+      logger.info('Tunnel stopped');
     }
     if (this.server) {
       await this.server.close();
+      logger.info('Server stopped');
     }
   }
 }

@@ -6,6 +6,7 @@ export interface NuCloudConfig {
   };
   producer?: {
     delay_seconds: number;
+    template_path?: string;
   };
   profiles?: {
     [profileName: string]: Partial<NuCloudConfig>;

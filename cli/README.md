@@ -59,43 +59,103 @@ nu-cloud init -o myconfig.yaml   # Custom output path
 - Delay between messages
 - Multiple profiles support
 
+### `nu-cloud send`
+Send a single message to Nu Cloud (manual mode).
+
+```bash
+# Using inline JSON/YAML data
+nu-cloud send --data '{"name": "John", "age": 30}'
+
+# Using a file
+nu-cloud send --file message.json
+
+# Using a custom template
+nu-cloud send --template custom-template.yaml
+
+# Dry run
+nu-cloud send --dry-run
+
+# With specific profile
+nu-cloud send --profile production --data '{"event": "user_login"}'
+```
+
+**Priority:** `--data` > `--file` > `--template` > config template > default template
+
+**Options:**
+- `-C, --config <path>` - Config file path (default: `config.yaml`)
+- `-p, --profile <name>` - Config profile to use
+- `-d, --data <json>` - Message data as JSON/YAML string
+- `-f, --file <path>` - Message data from file (JSON/YAML)
+- `-t, --template <path>` - Template file to use (overrides config)
+- `--dry-run` - Show what would be sent without sending
+
 ### `nu-cloud produce`
-Send messages to Nu Cloud.
+Send messages to Nu Cloud continuously.
 
 ```bash
 nu-cloud produce                         # Start continuous production
-nu-cloud produce --once                  # Send single message
+nu-cloud produce -c 10                   # Send 10 messages and exit
+nu-cloud produce -c 1                    # Send single message
 nu-cloud produce --dry-run               # Preview without sending
-nu-cloud produce --config custom.yaml    # Use custom config
+nu-cloud produce -C custom.yaml          # Use custom config
 nu-cloud produce --profile production    # Use named profile
 nu-cloud produce --delay 5               # Override delay (seconds)
+nu-cloud produce --template custom.yaml  # Use custom template
 ```
 
 **Options:**
-- `-c, --config <path>` - Config file path (default: `config.yaml`)
+- `-C, --config <path>` - Config file path (default: `config.yaml`)
 - `-p, --profile <name>` - Config profile to use
 - `-d, --delay <seconds>` - Delay between messages (overrides config)
-- `--once` - Send single message and exit
+- `-t, --template <path>` - Template file to use (overrides config)
+- `-c, --count <number>` - Send specified number of messages and exit
 - `--dry-run` - Show what would be sent without sending
 
 ### `nu-cloud consume`
-Start webhook consumer.
+Start webhook consumer with tunnel support.
 
 ```bash
-nu-cloud consume                 # Start consumer with tunnel
-nu-cloud consume --port 8080     # Custom port
-nu-cloud consume --debug         # Enable debug logging
-nu-cloud consume --no-tunnel     # Skip cloudflared tunnel
+# With auto-detected tunnel (cloudflared or tailscale)
+nu-cloud consume
+
+# With specific tunnel provider
+nu-cloud consume --tunnel cloudflared
+nu-cloud consume --tunnel tailscale
+
+# With custom webhook path (tailscale)
+nu-cloud consume --tunnel tailscale --tunnel-path /my-webhook
+
+# Without tunnel (local only)
+nu-cloud consume --no-tunnel
+
+# Custom port
+nu-cloud consume --port 8080
+
+# Debug mode
+nu-cloud consume --debug
 ```
 
 **Options:**
-- `--port <number>` - Server port (default: `6555`)
+- `-p, --port <number>` - Server port (default: `6555`)
+- `--tunnel <provider>` - Tunnel provider: `cloudflared`, `tailscale`, `none` (default: `auto`)
+- `--tunnel-path <path>` - Webhook path for tunnel (tailscale only, default: `/webhook`)
+- `--no-tunnel` - Skip tunnel setup
 - `--debug` - Enable debug logging
-- `--no-tunnel` - Skip cloudflared tunnel
 
-**Note:** Consumer automatically starts a Cloudflare tunnel if `cloudflared` is installed. Install it with:
-- macOS: `brew install cloudflare/cloudflare/cloudflared`
-- Linux: https://pkg.cloudflare.com/
+**Tunnel Providers:**
+- **cloudflared**: Automatic, requires `cloudflared` installed
+- **tailscale**: Requires `tailscale` installed and authenticated
+- **auto**: Detects which tool is available (cloudflared first, then tailscale)
+- **none**: Local server only (no public URL)
+
+**Install tunnel tools:**
+```bash
+# Cloudflared
+brew install cloudflare/cloudflare/cloudflared
+
+# Tailscale
+# Visit https://tailscale.com/download
+```
 
 ### `nu-cloud schema`
 Generate Avro schema from message template.
@@ -116,11 +176,15 @@ nu-cloud schema -o schema.avsc   # Save to file
 api:
   url: "https://your-api.nussknacker.io/topics/your-topic"
   username: "publisher"
-  password: "your_password"
+  password: ""  # Leave empty for endpoints without authentication
 
 producer:
   delay_seconds: 1
+  # template_path: "./custom-template.yaml"  # Optional: custom message template
 ```
+
+**Optional Authentication:**  
+If your endpoint doesn't require authentication, leave the password empty. If the endpoint requires auth but you provide no password, you'll get a `401` error.
 
 ### Multiple profiles
 
@@ -156,6 +220,64 @@ nu-cloud produce --profile staging
 ```
 
 Profiles are merged with the default configuration, so you only need to specify the values that differ.
+
+## Message Templates
+
+Templates define the structure of generated messages using faker.js for realistic test data.
+
+### Default Template
+
+The CLI includes a default template with faker.js support:
+
+```yaml
+name: "faker:person.fullName"
+email: "faker:internet.email"
+age: "faker:number.int(18,65)"
+timestamp: "current_timestamp"
+```
+
+### Custom Templates
+
+Create your own template file:
+
+```yaml
+# my-template.yaml
+userId: "faker:string.uuid"
+username: "faker:internet.userName"
+company: "faker:company.name"
+location: "faker:location.city"
+price: "faker:commerce.price(10,1000)"
+```
+
+**Use it:**
+
+```bash
+# In config.yaml
+producer:
+  template_path: "./my-template.yaml"
+
+# Or via CLI flag
+nu-cloud produce --template ./my-template.yaml
+nu-cloud send --template ./my-template.yaml
+```
+
+### Faker.js Syntax
+
+Supports full [faker.js API](https://fakerjs.dev/api/):
+
+- `faker:person.fullName` → Random full name
+- `faker:internet.email` → Random email
+- `faker:number.int(18,65)` → Random integer between 18 and 65
+- `faker:company.name` → Random company name
+- `faker:location.streetAddress` → Random street address
+- `faker:string.uuid` → Random UUID
+- `faker:commerce.price(10,1000)` → Random price between 10 and 1000
+
+### Legacy Syntax (still supported)
+
+- `random_name` → Random name from built-in list
+- `random_int(1,100)` → Random integer
+- `current_timestamp` → ISO 8601 timestamp
 
 ## Message Templates
 

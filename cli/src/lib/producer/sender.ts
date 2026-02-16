@@ -10,24 +10,36 @@ export async function sendData(
   data: any,
   dryRun: boolean = false
 ): Promise<void> {
+  const { url, username, password } = config.api;
+
+  // Add auth only if password is non-empty
+  const auth = password && password.trim() !== ''
+    ? { username, password }
+    : undefined;
+
   if (dryRun) {
-    logger.info('🔍 DRY RUN - Would send:');
-    console.log(JSON.stringify(data, null, 2));
+    logger.info('DRY RUN - Would send to:', url);
+    if (!auth) {
+      logger.warn('No authentication (empty password)');
+    }
+    logger.info('Data:', JSON.stringify(data, null, 2));
     return;
   }
 
   try {
-    await axios.post(config.api.url, data, {
-      auth: {
-        username: config.api.username,
-        password: config.api.password
-      },
+    await axios.post(url, data, {
+      auth,
       headers: {
         'Content-Type': 'application/json'
       }
     });
-    logger.success(`Sent message: ${JSON.stringify(data)}`);
+    logger.success(`Sent message:`, data);
   } catch (error: any) {
+    if (error.response?.status === 401) {
+      throw new ValidationError(
+        'Authentication failed (401). Check username/password in config.'
+      );
+    }
     if (error.response?.status === 400 && error.response?.data?.includes("Invalid message")) {
       throw new ValidationError(
         `\n\nSchema validation error detected!\n` +
