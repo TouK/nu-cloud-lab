@@ -1,1 +1,36 @@
+# OS
 .DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# CLI specific (detailed .gitignore in cli/ subdirectory)
+cli/node_modules/
+cli/dist/
+cli/config.yaml
+cli/*.tgz
+
+# Python specific
+python/**/venv/
+python/**/*_env/
+python/**/config.yaml
+python/**/__pycache__/
+python/**/*.pyc
+
+# Node.js specific
+node.js/**/node_modules/
+node.js/**/config.yaml
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
