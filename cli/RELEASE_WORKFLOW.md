@@ -1,5 +1,6 @@
 # Release Workflow
 
+
 Visual guide to the release process for `@nussknacker/cli`.
 
 ## Branch Strategy
