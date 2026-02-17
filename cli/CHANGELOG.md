@@ -1,3 +1,9 @@
+## [1.0.0-beta.2](https://github.com/TouK/nu-cloud-lab/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2026-02-17)
+
+### Bug Fixes
+
+* test beta release ([06bf026](https://github.com/TouK/nu-cloud-lab/commit/06bf026ab1a0a46c32c44910f16897c030434534))
+
 ## 1.0.0-beta.1 (2026-02-17)
 
 ### Bug Fixes
