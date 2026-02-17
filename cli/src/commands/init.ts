@@ -26,7 +26,7 @@ export const initCommand = new Command('init')
             type: 'input',
             name: 'url',
             message: 'Nu Cloud API URL:',
-            default: 'https://your-api-url.nussknacker.io/topics/your-topic',
+            default: 'https://your-api-url.cloud.nussknacker.io/topics/your-topic',
             validate: (input) => input.length > 0 || 'URL is required'
           },
           {

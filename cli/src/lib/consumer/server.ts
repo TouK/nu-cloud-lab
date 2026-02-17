@@ -10,7 +10,7 @@ export async function createServer(port: number, debug: boolean, jsonMode: boole
   fastify.post('/', async (request, reply) => {
     try {
       const data = request.body;
-      
+
       if (jsonMode) {
         // Output only raw JSON data to stdout
         logger.json(data);

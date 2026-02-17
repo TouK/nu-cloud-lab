@@ -1,6 +1,6 @@
 # API Configuration
 api:
-  url: "https://your-api-url.nussknacker.io/topics/your-topic"
+  url: "https://your-api-url.cloud.nussknacker.io/topics/your-topic"
   username: "publisher"
   password: ""  # Leave empty for endpoints without authentication
 
@@ -13,11 +13,11 @@ producer:
 # profiles:
 #   production:
 #     api:
-#       url: "https://prod.nussknacker.io/topics/prod"
+#       url: "https://prod.cloud.nussknacker.io/topics/prod"
 #       password: "prod_password"
 #     producer:
 #       template_path: "./prod-template.yaml"
 #   staging:
 #     api:
-#       url: "https://staging.nussknacker.io/topics/staging"
+#       url: "https://staging.cloud.nussknacker.io/topics/staging"
 #       password: "staging_password"

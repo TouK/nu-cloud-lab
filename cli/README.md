@@ -198,7 +198,7 @@ nu-cloud schema -o schema.avsc   # Save to file
 
 ```yaml
 api:
-  url: "https://your-api.nussknacker.io/topics/your-topic"
+  url: "https://your-api.cloud.nussknacker.io/topics/your-topic"
   username: "publisher"
   password: ""  # Leave empty for endpoints without authentication
 
@@ -217,7 +217,7 @@ Use profiles to manage different environments (dev/staging/prod):
 ```yaml
 # Default configuration
 api:
-  url: "https://dev.nussknacker.io/topics/dev"
+  url: "https://dev.cloud.nussknacker.io/topics/dev"
   username: "publisher"
   password: "dev_pass"
 
@@ -228,12 +228,12 @@ producer:
 profiles:
   production:
     api:
-      url: "https://prod.nussknacker.io/topics/prod"
+      url: "https://prod.cloud.nussknacker.io/topics/prod"
       password: "prod_pass"
   
   staging:
     api:
-      url: "https://staging.nussknacker.io/topics/staging"
+      url: "https://staging.cloud.nussknacker.io/topics/staging"
       password: "staging_pass"
 ```
 
