@@ -1,7 +1,7 @@
 {
-  "name": "@nu-cloud/cli",
+  "name": "@nussknacker/cli",
   "version": "0.1.0",
-  "description": "CLI tool for Nu Cloud messaging - produce and consume messages",
+  "description": "CLI tool for Nussknacker Cloud - produce and consume messages",
   "type": "module",
   "bin": {
     "nu-cloud": "./dist/index.js"

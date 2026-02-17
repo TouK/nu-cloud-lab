@@ -1,17 +1,17 @@
-# @nu-cloud/cli
+# @nussknacker/cli
 
-CLI tool for Nu Cloud messaging - produce and consume messages with ease.
+CLI tool for Nussknacker Cloud - produce and consume messages with ease.
 
 ## Installation
 
 ### Global (recommended)
 ```bash
-npm install -g @nu-cloud/cli
+npm install -g @nussknacker/cli
 ```
 
 ### Local (per-project)
 ```bash
-npm install @nu-cloud/cli
+npm install @nussknacker/cli
 npx nu-cloud --help
 ```
 

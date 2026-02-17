@@ -22,7 +22,7 @@ We now offer a unified CLI tool that provides the best developer experience:
 
 ```bash
 # Install globally
-npm install -g @nu-cloud/cli
+npm install -g @nussknacker/cli
 
 # Or use from the cli/ directory
 cd cli

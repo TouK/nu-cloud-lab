@@ -10,7 +10,7 @@ export function createCLI(): Command {
 
   program
     .name('nu-cloud')
-    .description('CLI tool for Nu Cloud messaging - produce and consume messages')
+    .description('CLI tool for Nussknacker Cloud - produce and consume messages')
     .version('0.1.0');
 
   program.addCommand(sendCommand);
