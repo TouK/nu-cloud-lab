@@ -9,6 +9,7 @@ export const consumeCommand = new Command('consume')
   .option('--tunnel <provider>', 'Tunnel provider: cloudflared, tailscale, none', 'auto')
   .option('--tunnel-path <path>', 'Webhook path for tunnel (tailscale)', '/webhook')
   .option('--no-tunnel', 'Skip tunnel setup')
+  .option('--exact-path', 'Accept webhooks only on root path (/) instead of wildcard')
   .option('--debug', 'Enable debug logging')
   .option('--json', 'Output raw JSON messages only (suitable for piping)')
   .action(async (options) => {
@@ -37,7 +38,8 @@ export const consumeCommand = new Command('consume')
         useTunnel,
         tunnelProvider,
         options.tunnelPath,
-        options.json
+        options.json,
+        !options.exactPath
       );
 
       // Graceful shutdown

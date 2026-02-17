@@ -145,6 +145,7 @@ nu-cloud consume --json --no-tunnel > messages.jsonl
 - `--tunnel <provider>` - Tunnel provider: `cloudflared`, `tailscale`, `none` (default: `auto`)
 - `--tunnel-path <path>` - Webhook path for tunnel (tailscale only, default: `/webhook`)
 - `--no-tunnel` - Skip tunnel setup
+- `--exact-path` - Accept webhooks only on root path `/` (default: wildcard `/*`)
 - `--debug` - Enable debug logging
 - `--json` - Output raw JSON only (suitable for piping to other tools)
 
@@ -154,8 +155,26 @@ nu-cloud consume --json --no-tunnel > messages.jsonl
 - **auto**: Detects which tool is available (cloudflared first, then tailscale)
 - **none**: Local server only (no public URL)
 
+**Webhook Path:**
+By default, the consumer accepts webhooks on **any path** (wildcard `/*`). Each message includes the request path in output:
+- Normal mode: Shows path with 📍 emoji before each message
+- JSON mode: Includes `path` field in output object `{"path": "/webhook", "data": {...}}`
+
+Use `--exact-path` to accept webhooks only on root path `/`:
+```bash
+nu-cloud consume --exact-path
+```
+With `--exact-path`:
+- Only `/` is accepted (other paths return 404)
+- Path is not shown in output
+- JSON mode outputs just the message data
+
 **JSON Mode:**
-The `--json` flag outputs only raw JSON messages (one per line) to stdout, suppressing all other logs. This is perfect for piping to other tools:
+The `--json` flag outputs only raw JSON messages (one per line) to stdout, suppressing all other logs.
+- Default (wildcard): `{"path": "/webhook", "data": {...}}`
+- With `--exact-path`: `{"email": "...", ...}` (just message data)
+
+Perfect for piping to other tools:
 
 ```bash
 # Filter emails with jq
