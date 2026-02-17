@@ -464,6 +464,66 @@ nu-cloud schema
 ```
 Then create a topic in Nu Cloud with this schema.
 
+## Release & Publishing
+
+This package uses **semantic-release** for automated versioning and publishing to npm.
+
+### Two-Track Release Strategy
+
+#### Stable Releases (`master` branch)
+- Merge to `master` → stable version (e.g., `0.2.0`)
+- Published with `latest` tag
+- Install: `npm install @nussknacker/cli`
+
+#### Beta Releases (`dev` branch)
+- Merge to `dev` → beta version (e.g., `0.2.0-beta.1`)
+- Published with `beta` tag
+- Install: `npm install @nussknacker/cli@beta`
+
+### How It Works
+
+**Beta workflow:**
+1. Create PR to `dev` branch with [Conventional Commits](https://www.conventionalcommits.org/)
+2. Merge → GitHub Actions publishes beta (`0.2.0-beta.1`)
+3. Test beta version
+
+**Stable workflow:**
+1. Merge `dev` → `master` (after testing)
+2. GitHub Actions publishes stable (`0.2.0`)
+
+### Commit Format
+
+- `feat: add new feature` → **MINOR** version bump (0.1.0 → 0.2.0)
+- `fix: resolve bug` → **PATCH** version bump (0.1.0 → 0.1.1)
+- `feat!: breaking change` → **MAJOR** version bump (0.1.0 → 1.0.0)
+- `docs: update readme` → No release
+- `chore: update deps` → No release
+
+### Version Examples
+
+```
+dev:    0.2.0-beta.1 → 0.2.0-beta.2 → 0.2.0-beta.3
+                                        ↓ merge to master
+master:                              0.2.0 → 0.2.1
+```
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for full workflow details.
+
+### Manual Testing
+
+```bash
+# Dry run (no publish)
+npm run build
+npm publish --dry-run
+
+# Test semantic-release locally
+npx semantic-release --dry-run --no-ci
+
+# Test beta from dev branch
+git checkout dev
+npx semantic-release --dry-run --no-ci
+```
+
 ## License
 
 Apache-2.0

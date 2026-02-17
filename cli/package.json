@@ -1,6 +1,6 @@
 {
   "name": "@nussknacker/cli",
-  "version": "0.1.0",
+  "version": "0.0.1-beta.1",
   "description": "CLI tool for Nussknacker Cloud - produce and consume messages",
   "type": "module",
   "bin": {
@@ -14,7 +14,9 @@
     "dev": "tsx src/index.ts",
     "build": "tsup src/index.ts --format esm --clean --shims",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "release:dry": "npx semantic-release --dry-run --no-ci",
+    "check:version": "./scripts/check-version.sh"
   },
   "keywords": [
     "nu-cloud",
@@ -37,8 +39,13 @@
     "yaml": "^2.3.4"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.6",
     "@types/inquirer": "^9.0.7",
     "@types/node": "^20.11.19",
+    "conventional-changelog-conventionalcommits": "^9.1.0",
+    "semantic-release": "^24.2.9",
     "tsup": "^8.0.1",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
