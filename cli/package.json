@@ -1,6 +1,6 @@
 {
   "name": "@nussknacker/cli",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0",
   "description": "CLI tool for Nussknacker Cloud - produce and consume messages",
   "type": "module",
   "bin": {
