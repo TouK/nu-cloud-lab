@@ -7,7 +7,7 @@ api:
 # Producer Configuration
 producer:
   delay_seconds: 1
-  # template_path: "./custom-template.yaml"  # Optional: path to custom message template
+  template_path: "./message-template.yaml"  # Path to message template (created by init)
 
 # Optional: Multiple profiles (dev/staging/prod)
 # profiles:

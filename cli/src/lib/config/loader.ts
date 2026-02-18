@@ -9,7 +9,7 @@ export async function loadConfig(
   configPath?: string,
   profileName?: string
 ): Promise<NuCloudConfig> {
-  const resolvedPath = configPath || path.join(process.cwd(), '.nu-cli.yaml');
+  const resolvedPath = configPath || path.join(process.cwd(), 'nu-config.yaml');
 
   try {
     const content = await fs.readFile(resolvedPath, 'utf-8');

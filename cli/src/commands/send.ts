@@ -7,7 +7,7 @@ import { logger } from '../utils/logger.js';
 
 export const sendCommand = new Command('send')
   .description('Send a single message to Nu Cloud')
-  .option('-C, --config <path>', 'Config file path', '.nu-cli.yaml')
+  .option('-C, --config <path>', 'Config file path', 'nu-config.yaml')
   .option('-p, --profile <name>', 'Config profile to use')
   .option('-d, --data <json>', 'Message data as JSON/YAML string')
   .option('-f, --file <path>', 'Message data from file (JSON/YAML)')

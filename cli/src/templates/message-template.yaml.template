@@ -1,0 +1,27 @@
+# Default message template for Nu Cloud
+# 
+# This template demonstrates faker.js syntax for generating random test data.
+# Full API reference: https://fakerjs.dev/api/
+#
+# Syntax:
+#   faker:category.method           -> faker.person.fullName()
+#   faker:category.method(params)   -> faker.number.int(18,65)
+#
+# Legacy syntax (still supported):
+#   random_name                     -> Random name from built-in list
+#   random_int(min,max)             -> Random integer
+#   current_timestamp               -> ISO 8601 timestamp
+
+name: "faker:person.fullName"
+email: "faker:internet.email"
+age: "faker:number.int(18,65)"
+timestamp: "current_timestamp"
+
+# More examples (commented out):
+# company: "faker:company.name"
+# address: "faker:location.streetAddress"
+# city: "faker:location.city"
+# phone: "faker:phone.number"
+# uuid: "faker:string.uuid"
+# productName: "faker:commerce.productName"
+# price: "faker:commerce.price(10,1000)"

@@ -52,6 +52,10 @@ nu-cli init --no-interactive   # Use template
 nu-cli init -o myconfig.yaml   # Custom output path
 ```
 
+**Creates:**
+- `nu-config.yaml` - Configuration file
+- `message-template.yaml` - Default message template
+
 **Interactive prompts:**
 - Nu Cloud API URL
 - Username
@@ -82,7 +86,7 @@ nu-cli send --profile production --data '{"event": "user_login"}'
 **Priority:** `--data` > `--file` > `--template` > config template > default template
 
 **Options:**
-- `-C, --config <path>` - Config file path (default: `.nu-cli.yaml`)
+- `-C, --config <path>` - Config file path (default: `nu-config.yaml`)
 - `-p, --profile <name>` - Config profile to use
 - `-d, --data <json>` - Message data as JSON/YAML string
 - `-f, --file <path>` - Message data from file (JSON/YAML)
@@ -104,7 +108,7 @@ nu-cli produce --template custom.yaml  # Use custom template
 ```
 
 **Options:**
-- `-C, --config <path>` - Config file path (default: `.nu-cli.yaml`)
+- `-C, --config <path>` - Config file path (default: `nu-config.yaml`)
 - `-p, --profile <name>` - Config profile to use
 - `-d, --delay <seconds>` - Delay between messages (overrides config)
 - `-t, --template <path>` - Template file to use (overrides config)
@@ -213,7 +217,7 @@ nu-cli schema -o schema.avsc   # Save to file
 
 ## Configuration
 
-### Basic config (`.nu-cli.yaml`)
+### Basic config (`nu-config.yaml`)
 
 ```yaml
 api:
@@ -223,7 +227,7 @@ api:
 
 producer:
   delay_seconds: 1
-  # template_path: "./custom-template.yaml"  # Optional: custom message template
+  template_path: "./message-template.yaml"  # Path to message template (created by init)
 ```
 
 **Optional Authentication:**  
@@ -295,7 +299,7 @@ price: "faker:commerce.price(10,1000)"
 **Use it:**
 
 ```bash
-# In .nu-cli.yaml
+# In nu-config.yaml
 producer:
   template_path: "./my-template.yaml"
 
@@ -449,7 +453,7 @@ nu-cli consume --no-tunnel
 Run `nu-cli init` to create a config file, or specify a custom path with `--config`.
 
 ### "Invalid or placeholder password"
-Edit your `.nu-cli.yaml` and set a real password (not `your_password`).
+Edit your `nu-config.yaml` and set a real password (not `your_password`).
 
 ### "cloudflared not found"
 Install cloudflared or use `--no-tunnel` flag:

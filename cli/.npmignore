@@ -18,7 +18,7 @@ coverage/
 # Config files
 .env
 .env.*
-.nu-cli.yaml
+nu-config.yaml
 
 # CI/CD
 .github/
