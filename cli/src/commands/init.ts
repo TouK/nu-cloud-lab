@@ -15,7 +15,7 @@ export const initCommand = new Command('init')
   .description('Initialize configuration file')
   .option('-i, --interactive', 'Interactive mode (default)', true)
   .option('--no-interactive', 'Non-interactive mode (use template)')
-  .option('-o, --output <path>', 'Output file path', '.nu-cli.yaml')
+  .option('-o, --output <path>', 'Output file path', 'nu-config.yaml')
   .action(async (options) => {
     try {
       let config: NuCloudConfig;
@@ -62,7 +62,8 @@ export const initCommand = new Command('init')
             password: answers.password
           },
           producer: {
-            delay_seconds: answers.delay
+            delay_seconds: answers.delay,
+            template_path: './message-template.yaml'
           }
         };
 
@@ -80,6 +81,17 @@ export const initCommand = new Command('init')
       // Write config
       const outputPath = path.resolve(options.output);
       await fs.writeFile(outputPath, yaml.stringify(config), 'utf-8');
+
+      // Copy message template next to config
+      const messageTemplateSrc = path.join(__dirname, 'message-template.yaml.template');
+      const messageTemplateDst = path.join(path.dirname(outputPath), 'message-template.yaml');
+
+      try {
+        await fs.copyFile(messageTemplateSrc, messageTemplateDst);
+        logger.success(`Message template created: ${messageTemplateDst}`);
+      } catch (error) {
+        logger.warn('Could not copy message template - using built-in default');
+      }
 
       logger.success(`Configuration file created: ${outputPath}`);
 

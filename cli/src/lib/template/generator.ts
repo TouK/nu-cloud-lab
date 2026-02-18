@@ -17,10 +17,10 @@ export const MESSAGE_TEMPLATE: TemplateObject = {
 
 /**
  * Load template from file or use default
- * 
+ *
  * Priority:
  *   1. Provided path (parameter)
- *   2. Default template (message-template.yaml)
+ *   2. Default template from dist/ (message-template.yaml.template)
  */
 export async function loadTemplate(templatePath?: string): Promise<TemplateObject> {
   if (templatePath) {
@@ -28,9 +28,9 @@ export async function loadTemplate(templatePath?: string): Promise<TemplateObjec
     const resolved = path.resolve(templatePath);
     return await parseFile(resolved);
   }
-  
-  // Default template (bundled with CLI - publicDir copies to dist/)
-  const defaultPath = path.join(__dirname, 'message-template.yaml');
+
+  // Fall back to bundled template
+  const defaultPath = path.join(__dirname, 'message-template.yaml.template');
   return await parseFile(defaultPath);
 }
 
