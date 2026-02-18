@@ -1,3 +1,9 @@
+## [1.0.2](https://github.com/TouK/nu-cloud-lab/compare/v1.0.1...v1.0.2) (2026-02-18)
+
+### Bug Fixes
+
+* fixed faker templates, added short prefix `::` ([11766ff](https://github.com/TouK/nu-cloud-lab/commit/11766ff2dba478e45bea8e2b670a4250538b0b14))
+
 ## [1.0.2-beta.1](https://github.com/TouK/nu-cloud-lab/compare/v1.0.1...v1.0.2-beta.1) (2026-02-18)
 
 ### Bug Fixes
