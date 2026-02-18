@@ -1,0 +1,29 @@
+# <type>(<scope>): <subject>
+#
+# <body>
+#
+# <footer>
+
+# Types:
+#   feat:     New feature (→ MINOR version)
+#   fix:      Bug fix (→ PATCH version)
+#   perf:     Performance improvement (→ PATCH version)
+#   refactor: Code refactoring (→ PATCH version)
+#   docs:     Documentation only (no release)
+#   style:    Code style/formatting (no release)
+#   test:     Adding tests (no release)
+#   chore:    Maintenance (no release)
+#   ci:       CI/CD changes (no release)
+#   build:    Build system changes (no release)
+#
+# Breaking changes:
+#   feat!:    Breaking change (→ MAJOR version)
+#   BREAKING CHANGE: in footer (→ MAJOR version)
+#
+# Examples:
+#   feat(consumer): add JSON output mode
+#   fix(producer): handle network errors gracefully
+#   feat!: redesign configuration file format
+#   docs: update README with examples
+#
+# Scope examples: producer, consumer, config, cli, schema

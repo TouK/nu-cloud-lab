@@ -1,0 +1,23 @@
+# API Configuration
+api:
+  url: "https://your-api-url.cloud.nussknacker.io/topics/your-topic"
+  username: "publisher"
+  password: ""  # Leave empty for endpoints without authentication
+
+# Producer Configuration
+producer:
+  delay_seconds: 1
+  # template_path: "./custom-template.yaml"  # Optional: path to custom message template
+
+# Optional: Multiple profiles (dev/staging/prod)
+# profiles:
+#   production:
+#     api:
+#       url: "https://prod.cloud.nussknacker.io/topics/prod"
+#       password: "prod_password"
+#     producer:
+#       template_path: "./prod-template.yaml"
+#   staging:
+#     api:
+#       url: "https://staging.cloud.nussknacker.io/topics/staging"
+#       password: "staging_password"

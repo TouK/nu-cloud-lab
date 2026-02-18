@@ -4,15 +4,59 @@ A development toolkit for experimenting with [Nu Cloud](https://cloud.nussknacke
 
 ## 🌟 Features
 
+- **Modern CLI Tool** - Unified TypeScript CLI with interactive setup and dry-run mode
 - Multiple implementation options:
-  - Python implementation
-  - Node.js implementation
+  - **CLI** (recommended) - TypeScript-based command-line tool
+  - Python implementation (legacy)
+  - Node.js implementation (legacy)
 - Docker support for environment-independent execution
 - Flexible message production with customizable templates
 - Secure webhook consumption via Cloudflare tunnels
 - Easy configuration and setup
 
-## 🚀 Quick Start
+## 🆕 CLI Tool (Recommended)
+
+We now offer a unified CLI tool that provides the best developer experience:
+
+### Installation
+
+```bash
+# Install globally
+npm install -g @nussknacker/cli
+
+# Or use from the cli/ directory
+cd cli
+npm install
+npm run build
+npm link
+```
+
+### Quick Start
+
+```bash
+# 1. Initialize configuration (interactive)
+nu-cloud init
+
+# 2. Start consuming messages
+nu-cloud consume
+
+# 3. Start producing messages
+nu-cloud produce
+
+# Other useful commands
+nu-cloud schema              # Generate Avro schema
+nu-cloud produce --dry-run   # Preview messages without sending
+nu-cloud produce --once      # Send single message
+nu-cloud --help              # Show all commands
+```
+
+See [`cli/README.md`](./cli/README.md) for complete CLI documentation.
+
+---
+
+## 🚀 Legacy Scripts (Python & Node.js)
+
+The following instructions are for the legacy standalone scripts. **We recommend using the CLI tool above for new projects.**
 
 ### Prerequisites
 
@@ -149,7 +193,15 @@ Simply use the Docker scripts provided:
 
 ```
 .
-├── python/
+├── cli/                   # Modern CLI tool (recommended)
+│   ├── src/
+│   │   ├── commands/      # CLI commands
+│   │   ├── lib/           # Core logic
+│   │   └── utils/         # Utilities
+│   ├── package.json
+│   └── README.md
+│
+├── python/                # Legacy Python scripts
 │   ├── consumer/
 │   │   ├── run_consumer.sh
 │   │   ├── run_consumer_in_docker.sh
@@ -158,7 +210,8 @@ Simply use the Docker scripts provided:
 │       ├── run_producer.sh
 │       ├── run_producer_in_docker.sh
 │       └── producer.py
-└── node.js/
+│
+└── node.js/               # Legacy Node.js scripts
     ├── consumer/
     │   ├── run_consumer.sh
     │   ├── run_consumer_in_docker.sh
@@ -187,6 +240,13 @@ This project is open source and available under the Apache License 2.0.
 
 ## 💡 Tips
 
+### For CLI Users
+1. Use `nu-cloud init` for interactive configuration setup
+2. Use `nu-cloud produce --dry-run` to preview messages before sending
+3. Use `nu-cloud schema` to generate Avro schemas for your message templates
+4. Use `--profile` flag to switch between environments (dev/staging/prod)
+
+### For Legacy Script Users
 1. Always check if your message structure matches the expected Avro schema in Nu Cloud
 2. Use the `--schema` flag with producers to generate Avro schema for your messages
 3. Keep the webhook URL secure as it provides direct access to your consumer

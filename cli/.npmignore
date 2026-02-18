@@ -1,0 +1,36 @@
+# Source files (we publish only dist/)
+src/
+tsconfig.json
+tsup.config.ts
+
+# Development files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test files
+*.test.ts
+*.spec.ts
+coverage/
+.nyc_output/
+
+# Config files
+.env
+.env.*
+.nu-cli.yaml
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+
+# Documentation that's not needed in package
+CONTRIBUTING.md
+.editorconfig
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
