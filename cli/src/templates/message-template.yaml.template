@@ -1,27 +1,28 @@
 # Default message template for Nu Cloud
-# 
-# This template demonstrates faker.js syntax for generating random test data.
+#
+# Faker.js integration for generating realistic test data.
 # Full API reference: https://fakerjs.dev/api/
 #
 # Syntax:
-#   faker:category.method           -> faker.person.fullName()
-#   faker:category.method(params)   -> faker.number.int(18,65)
+#   ::category.method                    -> faker.person.fullName()
+#   ::category.method({...})             -> faker.number.int({min:18, max:65})
+#   ::category.method([...])             -> faker.helpers.arrayElement(["a","b"])
+#   ::category.method([...], {...})      -> faker.helpers.arrayElements([...], {min:2})
 #
-# Legacy syntax (still supported):
-#   random_name                     -> Random name from built-in list
-#   random_int(min,max)             -> Random integer
-#   current_timestamp               -> ISO 8601 timestamp
+# Special values:
+#   current_timestamp                    -> ISO 8601 timestamp
 
-name: "faker:person.fullName"
-email: "faker:internet.email"
-age: "faker:number.int(18,65)"
+name: "::person.fullName"
+email: "::internet.email"
+age: "::number.int({min:18, max:65})"
 timestamp: "current_timestamp"
 
 # More examples (commented out):
-# company: "faker:company.name"
-# address: "faker:location.streetAddress"
-# city: "faker:location.city"
-# phone: "faker:phone.number"
-# uuid: "faker:string.uuid"
-# productName: "faker:commerce.productName"
-# price: "faker:commerce.price(10,1000)"
+# company: "::company.name"
+# address: "::location.streetAddress"
+# city: "::location.city"
+# phone: "::phone.number"
+# uuid: "::string.uuid"
+# productName: "::commerce.productName"
+# price: "::commerce.price({min:10, max:1000})"
+# status: '::helpers.arrayElement(["active","pending","completed"])'
