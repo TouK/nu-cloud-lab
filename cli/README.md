@@ -277,9 +277,9 @@ Templates define the structure of generated messages using faker.js for realisti
 The CLI includes a default template with faker.js support:
 
 ```yaml
-name: "faker:person.fullName"
-email: "faker:internet.email"
-age: "faker:number.int(18,65)"
+name: "::person.fullName"
+email: "::internet.email"
+age: "::number.int({min:18, max:65})"
 timestamp: "current_timestamp"
 ```
 
@@ -289,11 +289,12 @@ Create your own template file:
 
 ```yaml
 # my-template.yaml
-userId: "faker:string.uuid"
-username: "faker:internet.userName"
-company: "faker:company.name"
-location: "faker:location.city"
-price: "faker:commerce.price(10,1000)"
+userId: "::string.uuid"
+username: "::internet.userName"
+company: "::company.name"
+location: "::location.city"
+price: "::commerce.price({min:10, max:1000})"
+status: '::helpers.arrayElement(["active","pending","suspended"])'
 ```
 
 **Use it:**
@@ -310,62 +311,80 @@ nu-cli send --template ./my-template.yaml
 
 ### Faker.js Syntax
 
-Supports full [faker.js API](https://fakerjs.dev/api/):
+Full [faker.js API](https://fakerjs.dev/api/) support using `::` prefix. Parameters are parsed as JSON and spread as `...args` to faker functions.
 
-- `faker:person.fullName` → Random full name
-- `faker:internet.email` → Random email
-- `faker:number.int(18,65)` → Random integer between 18 and 65
-- `faker:company.name` → Random company name
-- `faker:location.streetAddress` → Random street address
-- `faker:string.uuid` → Random UUID
-- `faker:commerce.price(10,1000)` → Random price between 10 and 1000
+**Simple calls (no parameters):**
+```yaml
+name: "::person.fullName"
+email: "::internet.email"
+company: "::company.name"
+address: "::location.streetAddress"
+uuid: "::string.uuid"
+```
 
-### Legacy Syntax (still supported)
+**With parameters (use JSON syntax, wrap in single quotes in YAML):**
+```yaml
+# Object parameters
+age: "::number.int({min:18, max:65})"
+price: "::commerce.price({min:10, max:1000})"
 
-- `random_name` → Random name from built-in list
-- `random_int(1,100)` → Random integer
+# Single argument (array)
+event: '::helpers.arrayElement(["login","logout","purchase"])'
+
+# Multiple arguments (array, options object)
+tags: '::helpers.arrayElements(["tech","sports","music"], {min:2, max:4})'
+
+# Multiple arguments (coordinates, distance, isMetric)
+location: '::location.nearbyGPSCoordinate([52.52, 13.40], 10, true)'
+```
+
+**How it works:**
+- `::category.method` maps to `faker.category.method()`
+- Parameters are parsed as JSON: `({min:18,max:65})` → `fn({min:18, max:65})`
+- Supports any faker.js function signature exactly as documented
+
+**Special values:**
 - `current_timestamp` → ISO 8601 timestamp
 
-## Message Templates
+### Advanced Examples
 
-Messages are generated from templates defined in `src/lib/template/generator.ts`. To customize message structure, edit the `MESSAGE_TEMPLATE` constant:
-
-```typescript
-export const MESSAGE_TEMPLATE: TemplateObject = {
-  "name": "random_name",
-};
+**Complete event template:**
+```yaml
+# events.yaml
+userId: "::string.uuid"
+eventType: '::helpers.arrayElement(["login","logout","purchase","click"])'
+timestamp: "current_timestamp"
+user:
+  name: "::person.fullName"
+  email: "::internet.email"
+  age: "::number.int({min:18, max:65})"
+metadata:
+  ip: "::internet.ip"
+  device: '::helpers.arrayElement(["mobile","desktop","tablet"])'
+  browser: '::helpers.arrayElement(["Chrome","Firefox","Safari","Edge"])'
+  location: "::location.city"
+  coordinates: '::location.nearbyGPSCoordinate([52.52, 13.40], 10, true)'
 ```
 
-### Example: Complex template
-
-```typescript
-export const MESSAGE_TEMPLATE = {
-  user: {
-    name: "random_name",
-    city: "random_city"
-  },
-  order: {
-    product: "random_product",
-    quantity: "random_int(1,5)",
-    status: "random_status",
-    timestamp: "current_timestamp"
-  }
-};
+**E-commerce order:**
+```yaml
+orderId: "::string.uuid"
+products: '::helpers.arrayElements(["laptop","phone","tablet","watch","headphones"], {min:1, max:3})'
+totalPrice: "::commerce.price({min:50, max:5000})"
+status: '::helpers.arrayElement(["pending","processing","shipped","delivered"])'
+customer:
+  id: "::string.uuid"
+  name: "::person.fullName"
+  email: "::internet.email"
+shippingAddress:
+  street: "::location.streetAddress"
+  city: "::location.city"
+  country: "::location.country"
+  zipCode: "::location.zipCode"
+createdAt: "current_timestamp"
 ```
 
-### Available placeholders
 
-- `random_name` - Random person name from predefined list
-- `random_city` - Random city name
-- `random_product` - Random product name
-- `random_status` - Random status (pending, completed, failed, in_progress)
-- `random_int(min,max)` - Random integer in range (e.g., `random_int(1,10)`)
-- `current_timestamp` - ISO 8601 timestamp (e.g., `2024-02-16T10:30:00.000Z`)
-
-After modifying the template, rebuild the CLI:
-```bash
-npm run build
-```
 
 ## Examples
 
