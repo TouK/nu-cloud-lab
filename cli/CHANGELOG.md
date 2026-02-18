@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/TouK/nu-cloud-lab/compare/v1.0.0...v1.0.1) (2026-02-18)
+
+### Bug Fixes
+
+* beta tag fixed ([a55f07b](https://github.com/TouK/nu-cloud-lab/commit/a55f07b18a84dfccfcc2e6c6faa4449ceed40921))
+* config and message template ([3e93efc](https://github.com/TouK/nu-cloud-lab/commit/3e93efcc2e602e94810a4421dde108647087ded7))
+* trigger build ([023352e](https://github.com/TouK/nu-cloud-lab/commit/023352e9b94d399c72e54d3c4bf0c0b0ad6833a2))
+
 ## [1.0.1-beta.2](https://github.com/TouK/nu-cloud-lab/compare/v1.0.1-beta.1...v1.0.1-beta.2) (2026-02-18)
 
 ### Bug Fixes
