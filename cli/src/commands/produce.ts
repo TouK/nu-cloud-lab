@@ -7,7 +7,7 @@ import { logger } from '../utils/logger.js';
 
 export const produceCommand = new Command('produce')
   .description('Send messages to Nu Cloud continuously')
-  .option('-C, --config <path>', 'Config file path', '.nu-cloud.yaml')
+  .option('-C, --config <path>', 'Config file path', '.nu-cli.yaml')
   .option('-p, --profile <name>', 'Config profile to use')
   .option('-d, --delay <seconds>', 'Delay between messages (overrides config)', parseFloat)
   .option('-t, --template <path>', 'Template file to use (overrides config)')

@@ -19,7 +19,7 @@
     "check:version": "./scripts/check-version.sh"
   },
   "keywords": [
-    "nu-cloud",
+    "nu-cli",
     "nussknacker",
     "messaging",
     "cli",

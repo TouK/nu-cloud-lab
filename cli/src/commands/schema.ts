@@ -8,7 +8,7 @@ import { logger } from '../utils/logger.js';
 
 export const schemaCommand = new Command('schema')
   .description('Generate Avro schema from message template')
-  .option('-C, --config <path>', 'Config file path', '.nu-cloud.yaml')
+  .option('-C, --config <path>', 'Config file path', '.nu-cli.yaml')
   .option('-p, --profile <name>', 'Config profile to use')
   .option('-t, --template <path>', 'Template file to use (overrides config)')
   .option('-o, --output <path>', 'Output file (stdout if not specified)')

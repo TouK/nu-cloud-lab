@@ -9,7 +9,7 @@ export async function loadConfig(
   configPath?: string,
   profileName?: string
 ): Promise<NuCloudConfig> {
-  const resolvedPath = configPath || path.join(process.cwd(), '.nu-cloud.yaml');
+  const resolvedPath = configPath || path.join(process.cwd(), '.nu-cli.yaml');
 
   try {
     const content = await fs.readFile(resolvedPath, 'utf-8');
@@ -26,7 +26,7 @@ export async function loadConfig(
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
       logger.error(`Config file not found: ${resolvedPath}`);
-      logger.info('Run "nu-cloud init" to create a config file');
+      logger.info('Run "nu-cli init" to create a config file');
     }
     throw error;
   }

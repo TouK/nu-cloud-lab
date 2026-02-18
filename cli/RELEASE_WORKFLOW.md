@@ -52,7 +52,7 @@ git push origin feat/new-feature
 ```bash
 # Test beta version
 npm install @nussknacker/cli@beta
-nu-cloud --version  # 0.2.0-beta.1
+nu-cli --version  # 0.2.0-beta.1
 
 # If bugs found, create more PRs to dev
 git commit -m "fix: resolve beta bug"

@@ -120,7 +120,7 @@ master branch:                        0.2.0 → 0.2.1 → ...
 6. **Test beta version**
    ```bash
    npm install @nussknacker/cli@beta
-   nu-cloud --version  # Should show beta version
+   nu-cli --version  # Should show beta version
    ```
 
 ### For Stable Release

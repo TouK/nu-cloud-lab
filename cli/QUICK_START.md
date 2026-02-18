@@ -71,7 +71,7 @@ git push origin feat/my-feature
 
 # 5. Test beta
 npm install @nussknacker/cli@beta
-nu-cloud --version
+nu-cli --version
 ```
 
 ### Stable Release (master branch)
@@ -171,7 +171,7 @@ A: No! The `dev` branch is **automatically synced** after every stable release.
 
 ```bash
 # GitHub workflows status
-https://github.com/YOUR_ORG/nu-cloud-lab/actions
+https://github.com/YOUR_ORG/nu-cli-lab/actions
 
 # NPM package page
 https://www.npmjs.com/package/@nussknacker/cli

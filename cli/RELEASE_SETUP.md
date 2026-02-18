@@ -75,7 +75,7 @@ GitHub Actions should automatically:
 Beta verification:
 ```bash
 npm install @nussknacker/cli@beta
-nu-cloud --version  # Should show 0.2.0-beta.1
+nu-cli --version  # Should show 0.2.0-beta.1
 ```
 
 ### Test Stable Release (master branch)
@@ -95,7 +95,7 @@ GitHub Actions should automatically:
 Stable verification:
 ```bash
 npm install @nussknacker/cli
-nu-cloud --version  # Should show 0.2.0
+nu-cli --version  # Should show 0.2.0
 ```
 
 ## 7. Verification

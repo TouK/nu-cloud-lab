@@ -12,7 +12,7 @@ npm install -g @nussknacker/cli
 ### Local (per-project)
 ```bash
 npm install @nussknacker/cli
-npx nu-cloud --help
+npx nu-cli --help
 ```
 
 ### Development
@@ -27,29 +27,29 @@ npm link
 
 1. **Initialize configuration:**
    ```bash
-   nu-cloud init
+   nu-cli init
    ```
 
 2. **Start consuming messages:**
    ```bash
-   nu-cloud consume
+   nu-cli consume
    ```
    Copy the webhook URL to Nu Cloud subscription.
 
 3. **Start producing messages:**
    ```bash
-   nu-cloud produce
+   nu-cli produce
    ```
 
 ## Commands
 
-### `nu-cloud init`
+### `nu-cli init`
 Initialize configuration file interactively.
 
 ```bash
-nu-cloud init                    # Interactive mode
-nu-cloud init --no-interactive   # Use template
-nu-cloud init -o myconfig.yaml   # Custom output path
+nu-cli init                    # Interactive mode
+nu-cli init --no-interactive   # Use template
+nu-cli init -o myconfig.yaml   # Custom output path
 ```
 
 **Interactive prompts:**
@@ -59,85 +59,85 @@ nu-cloud init -o myconfig.yaml   # Custom output path
 - Delay between messages
 - Multiple profiles support
 
-### `nu-cloud send`
+### `nu-cli send`
 Send a single message to Nu Cloud (manual mode).
 
 ```bash
 # Using inline JSON/YAML data
-nu-cloud send --data '{"name": "John", "age": 30}'
+nu-cli send --data '{"name": "John", "age": 30}'
 
 # Using a file
-nu-cloud send --file message.json
+nu-cli send --file message.json
 
 # Using a custom template
-nu-cloud send --template custom-template.yaml
+nu-cli send --template custom-template.yaml
 
 # Dry run
-nu-cloud send --dry-run
+nu-cli send --dry-run
 
 # With specific profile
-nu-cloud send --profile production --data '{"event": "user_login"}'
+nu-cli send --profile production --data '{"event": "user_login"}'
 ```
 
 **Priority:** `--data` > `--file` > `--template` > config template > default template
 
 **Options:**
-- `-C, --config <path>` - Config file path (default: `.nu-cloud.yaml`)
+- `-C, --config <path>` - Config file path (default: `.nu-cli.yaml`)
 - `-p, --profile <name>` - Config profile to use
 - `-d, --data <json>` - Message data as JSON/YAML string
 - `-f, --file <path>` - Message data from file (JSON/YAML)
 - `-t, --template <path>` - Template file to use (overrides config)
 - `--dry-run` - Show what would be sent without sending
 
-### `nu-cloud produce`
+### `nu-cli produce`
 Send messages to Nu Cloud continuously.
 
 ```bash
-nu-cloud produce                         # Start continuous production
-nu-cloud produce -c 10                   # Send 10 messages and exit
-nu-cloud produce -c 1                    # Send single message
-nu-cloud produce --dry-run               # Preview without sending
-nu-cloud produce -C custom.yaml          # Use custom config
-nu-cloud produce --profile production    # Use named profile
-nu-cloud produce --delay 5               # Override delay (seconds)
-nu-cloud produce --template custom.yaml  # Use custom template
+nu-cli produce                         # Start continuous production
+nu-cli produce -c 10                   # Send 10 messages and exit
+nu-cli produce -c 1                    # Send single message
+nu-cli produce --dry-run               # Preview without sending
+nu-cli produce -C custom.yaml          # Use custom config
+nu-cli produce --profile production    # Use named profile
+nu-cli produce --delay 5               # Override delay (seconds)
+nu-cli produce --template custom.yaml  # Use custom template
 ```
 
 **Options:**
-- `-C, --config <path>` - Config file path (default: `.nu-cloud.yaml`)
+- `-C, --config <path>` - Config file path (default: `.nu-cli.yaml`)
 - `-p, --profile <name>` - Config profile to use
 - `-d, --delay <seconds>` - Delay between messages (overrides config)
 - `-t, --template <path>` - Template file to use (overrides config)
 - `-c, --count <number>` - Send specified number of messages and exit
 - `--dry-run` - Show what would be sent without sending
 
-### `nu-cloud consume`
+### `nu-cli consume`
 Start webhook consumer with tunnel support.
 
 ```bash
 # With auto-detected tunnel (cloudflared or tailscale)
-nu-cloud consume
+nu-cli consume
 
 # With specific tunnel provider
-nu-cloud consume --tunnel cloudflared
-nu-cloud consume --tunnel tailscale
+nu-cli consume --tunnel cloudflared
+nu-cli consume --tunnel tailscale
 
 # With custom webhook path (tailscale)
-nu-cloud consume --tunnel tailscale --tunnel-path /my-webhook
+nu-cli consume --tunnel tailscale --tunnel-path /my-webhook
 
 # Without tunnel (local only)
-nu-cloud consume --no-tunnel
+nu-cli consume --no-tunnel
 
 # Custom port
-nu-cloud consume --port 8080
+nu-cli consume --port 8080
 
 # Debug mode
-nu-cloud consume --debug
+nu-cli consume --debug
 
 # JSON output mode (for piping)
-nu-cloud consume --json
-nu-cloud consume --json | jq '.email'
-nu-cloud consume --json --no-tunnel > messages.jsonl
+nu-cli consume --json
+nu-cli consume --json | jq '.email'
+nu-cli consume --json --no-tunnel > messages.jsonl
 ```
 
 **Options:**
@@ -162,7 +162,7 @@ By default, the consumer accepts webhooks on **any path** (wildcard `/*`). Each 
 
 Use `--exact-path` to accept webhooks only on root path `/`:
 ```bash
-nu-cloud consume --exact-path
+nu-cli consume --exact-path
 ```
 With `--exact-path`:
 - Only `/` is accepted (other paths return 404)
@@ -178,13 +178,13 @@ Perfect for piping to other tools:
 
 ```bash
 # Filter emails with jq
-nu-cloud consume --json | jq '.email'
+nu-cli consume --json | jq '.email'
 
 # Save to JSONL file
-nu-cloud consume --json --no-tunnel > messages.jsonl
+nu-cli consume --json --no-tunnel > messages.jsonl
 
 # Process with custom script
-nu-cloud consume --json | while read -r msg; do
+nu-cli consume --json | while read -r msg; do
   echo "$msg" | jq '.userId' >> user_ids.txt
 done
 ```
@@ -200,12 +200,12 @@ brew install cloudflare/cloudflare/cloudflared
 # Visit https://tailscale.com/download
 ```
 
-### `nu-cloud schema`
+### `nu-cli schema`
 Generate Avro schema from message template.
 
 ```bash
-nu-cloud schema                  # Print to stdout
-nu-cloud schema -o schema.avsc   # Save to file
+nu-cli schema                  # Print to stdout
+nu-cli schema -o schema.avsc   # Save to file
 ```
 
 **Options:**
@@ -213,7 +213,7 @@ nu-cloud schema -o schema.avsc   # Save to file
 
 ## Configuration
 
-### Basic config (`.nu-cloud.yaml`)
+### Basic config (`.nu-cli.yaml`)
 
 ```yaml
 api:
@@ -258,8 +258,8 @@ profiles:
 
 **Usage:**
 ```bash
-nu-cloud produce --profile production
-nu-cloud produce --profile staging
+nu-cli produce --profile production
+nu-cli produce --profile staging
 ```
 
 Profiles are merged with the default configuration, so you only need to specify the values that differ.
@@ -295,13 +295,13 @@ price: "faker:commerce.price(10,1000)"
 **Use it:**
 
 ```bash
-# In .nu-cloud.yaml
+# In .nu-cli.yaml
 producer:
   template_path: "./my-template.yaml"
 
 # Or via CLI flag
-nu-cloud produce --template ./my-template.yaml
-nu-cloud send --template ./my-template.yaml
+nu-cli produce --template ./my-template.yaml
+nu-cli send --template ./my-template.yaml
 ```
 
 ### Faker.js Syntax
@@ -367,17 +367,17 @@ npm run build
 
 ### Continuous production with custom delay
 ```bash
-nu-cloud produce --delay 3
+nu-cli produce --delay 3
 ```
 
 ### Single message to production environment
 ```bash
-nu-cloud produce --profile production --once
+nu-cli produce --profile production --once
 ```
 
 ### Dry run to test message structure
 ```bash
-nu-cloud produce --dry-run --once
+nu-cli produce --dry-run --once
 {
   "name": "Alice"
 }
@@ -385,12 +385,12 @@ nu-cloud produce --dry-run --once
 
 ### Generate and save Avro schema
 ```bash
-nu-cloud schema -o schema.avsc
+nu-cli schema -o schema.avsc
 ```
 
 ### Start consumer on custom port without tunnel
 ```bash
-nu-cloud consume --port 9000 --no-tunnel
+nu-cli consume --port 9000 --no-tunnel
 ```
 
 ## Development
@@ -430,37 +430,37 @@ npm run build
 npm link
 
 # Test all commands
-nu-cloud --help
-nu-cloud init --no-interactive
-nu-cloud schema
-nu-cloud produce --dry-run --once
-nu-cloud consume --no-tunnel
+nu-cli --help
+nu-cli init --no-interactive
+nu-cli schema
+nu-cli produce --dry-run --once
+nu-cli consume --no-tunnel
 ```
 
 ### Making Changes
 
 1. Edit source files in `src/`
 2. Run `npm run build` to compile
-3. Test with `nu-cloud` command
+3. Test with `nu-cli` command
 
 ## Troubleshooting
 
 ### "Config file not found"
-Run `nu-cloud init` to create a config file, or specify a custom path with `--config`.
+Run `nu-cli init` to create a config file, or specify a custom path with `--config`.
 
 ### "Invalid or placeholder password"
-Edit your `.nu-cloud.yaml` and set a real password (not `your_password`).
+Edit your `.nu-cli.yaml` and set a real password (not `your_password`).
 
 ### "cloudflared not found"
 Install cloudflared or use `--no-tunnel` flag:
 ```bash
-nu-cloud consume --no-tunnel
+nu-cli consume --no-tunnel
 ```
 
 ### Schema validation errors
 Generate the correct Avro schema for your message template:
 ```bash
-nu-cloud schema
+nu-cli schema
 ```
 Then create a topic in Nu Cloud with this schema.
 

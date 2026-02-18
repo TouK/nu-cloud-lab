@@ -5,7 +5,7 @@ node_modules/
 dist/
 
 # Config files (contains secrets)
-.nu-cloud.yaml
+.nu-cli.yaml
 *.yaml
 !src/templates/*.yaml.template
 

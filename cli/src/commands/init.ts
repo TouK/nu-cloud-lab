@@ -15,7 +15,7 @@ export const initCommand = new Command('init')
   .description('Initialize configuration file')
   .option('-i, --interactive', 'Interactive mode (default)', true)
   .option('--no-interactive', 'Non-interactive mode (use template)')
-  .option('-o, --output <path>', 'Output file path', '.nu-cloud.yaml')
+  .option('-o, --output <path>', 'Output file path', '.nu-cli.yaml')
   .action(async (options) => {
     try {
       let config: NuCloudConfig;
